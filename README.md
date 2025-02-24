@@ -53,7 +53,7 @@ BudgetWise est une plateforme qui simplifie la gestion budgétaire en permettant
 | ☁️ **Déploiement** | AWS / Azure / DigitalOcean |
 | 🔐 **Sécurité** | Hachage des mots de passe, protection XSS, requêtes sécurisées |
 | 📈 **IA** | Intégration de Gemini AI pour suggestions budgétaires |
-| 📊 **Front-end** | Blade / Vue.js (optionnel) |
+| 📊 **Front-end** | Blade  |
 | 📨 **Notifications** | Emails automatiques (ex. alertes de seuil) |
 
 ---
@@ -92,5 +92,3 @@ php artisan migrate --seed
 ```sh
 php artisan serve
 ```
-
----
