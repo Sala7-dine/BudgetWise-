@@ -157,38 +157,26 @@
                 <div class="flex border-b border-gray-700">
                     <button class="px-6 py-4 text-white bg-gray-700 font-medium">Utilisateurs</button>
                     <button class="px-6 py-4 text-gray-400 hover:text-white transition-colors">Catégories</button>
-                    <button class="px-6 py-4 text-gray-400 hover:text-white transition-colors">Rapports</button>
-                    <button class="px-6 py-4 text-gray-400 hover:text-white transition-colors">Paramètres</button>
+                    <button class="px-6 py-4 text-gray-400 hover:text-white transition-colors">Statistiques</button>
                 </div>
 
-                <!-- Contenu de l'onglet -->
+                <!-- Contenu du tableau -->
                 <div class="p-6">
                     <!-- En-tête avec recherche et filtres -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 space-y-4 md:space-y-0">
-                        <div class="relative">
-                            <input type="text" placeholder="Rechercher un utilisateur..." class="w-full md:w-80 bg-gray-700 border-0 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500">
-                            <svg class="w-5 h-5 text-gray-400 absolute left-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                        <div class="relative flex-1 max-w-md mb-4 md:mb-0">
+                            <input type="text" placeholder="Rechercher un utilisateur..." class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        
                         <div class="flex space-x-3">
-                            <div class="relative">
-                                <select class="appearance-none bg-gray-700 border-0 rounded-xl py-3 pl-4 pr-10 text-white focus:ring-2 focus:ring-blue-500">
-                                    <option>Tous les utilisateurs</option>
-                                    <option>Actifs</option>
-                                    <option>Inactifs</option>
-                                    <option>Nouveaux</option>
-                                </select>
-                                <svg class="w-5 h-5 text-gray-400 absolute right-3 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-xl hover:bg-gray-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                                 </svg>
-                            </div>
-                            
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-4 py-3 font-medium transition-colors flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
+                            </button>
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
                                 Exporter
                             </button>
                         </div>
@@ -196,135 +184,21 @@
 
                     <!-- Tableau des utilisateurs -->
                     <div class="overflow-x-auto">
-                        <table class="min-w-full">
+                        <table class="w-full">
                             <thead>
-                                <tr class="border-b border-gray-700">
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Utilisateur</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Revenu</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Économies</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Statut</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Dernière activité</th>
-                                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+                                <tr class="text-left text-gray-400 text-sm">
+                                    <th class="pb-4 font-medium">Utilisateur</th>
+                                    <th class="pb-4 font-medium">Statut</th>
+                                    <th class="pb-4 font-medium">Économies</th>
+                                    <th class="pb-4 font-medium">Dernière activité</th>
+                                    <th class="pb-4 font-medium">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-700">
-                                <!-- Utilisateur 1 -->
-                                <tr class="hover:bg-gray-700/50 transition-colors">
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="h-10 w-10 rounded-xl bg-blue-600/20 flex items-center justify-center text-blue-500 font-bold">SM</div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-white">Sarah Moussaid</div>
-                                                <div class="text-sm text-gray-400">sarah.m@example.com</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-white">6,500 DH</div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="w-16 bg-gray-700 rounded-full h-2 mr-2">
-                                                <div class="bg-green-500 h-2 rounded-full" style="width: 65%"></div>
-                                            </div>
-                                            <span class="text-sm text-white">65%</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-md bg-green-900/20 text-green-400">Actif</span>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        Il y a 2 heures
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-blue-400 hover:text-blue-300 mr-3">Voir</button>
-                                        <button class="text-red-400 hover:text-red-300">Supprimer</button>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Utilisateur 2 -->
-                                <tr class="hover:bg-gray-700/50 transition-colors">
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="h-10 w-10 rounded-xl bg-purple-600/20 flex items-center justify-center text-purple-500 font-bold">KA</div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-white">Karim Alami</div>
-                                                <div class="text-sm text-gray-400">karim.a@example.com</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-white">4,200 DH</div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="w-16 bg-gray-700 rounded-full h-2 mr-2">
-                                                <div class="bg-green-500 h-2 rounded-full" style="width: 32%"></div>
-                                            </div>
-                                            <span class="text-sm text-white">32%</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-md bg-yellow-900/20 text-yellow-400">Inactif</span>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        Il y a 5 jours
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-blue-400 hover:text-blue-300 mr-3">Voir</button>
-                                        <button class="text-red-400 hover:text-red-300">Supprimer</button>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Utilisateur 3 -->
-                                <tr class="hover:bg-gray-700/50 transition-colors">
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="h-10 w-10 rounded-xl bg-green-600/20 flex items-center justify-center text-green-500 font-bold">LB</div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-white">Leila Bennani</div>
-                                                <div class="text-sm text-gray-400">leila.b@example.com</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-white">8,100 DH</div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="w-16 bg-gray-700 rounded-full h-2 mr-2">
-                                                <div class="bg-green-500 h-2 rounded-full" style="width: 78%"></div>
-                                            </div>
-                                            <span class="text-sm text-white">78%</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs rounded-md bg-green-900/20 text-green-400">Actif</span>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">
-                                        Aujourd'hui
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-blue-400 hover:text-blue-300 mr-3">Voir</button>
-                                        <button class="text-red-400 hover:text-red-300">Supprimer</button>
-                                    </td>
-                                </tr>
+                            <tbody class="text-gray-300">
+                                <!-- Lignes du tableau -->
+                                <!-- ... -->
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <div class="flex items-center justify-between mt-6">
-                        <div class="text-sm text-gray-400">
-                            Affichage de 1 à 3 sur 48 utilisateurs
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="px-3 py-2 rounded-lg bg-gray-700 text-gray-400 hover:bg-gray-600 transition-colors">Précédent</button>
-                            <button class="px-3 py-2 rounded-lg bg-blue-600 text-white">1</button>
-                            <button class="px-3 py-2 rounded-lg bg-gray-700 text-gray-400 hover:bg-gray-600 transition-colors">2</button>
-                            <button class="px-3 py-2 rounded-lg bg-gray-700 text-gray-400 hover:bg-gray-600 transition-colors">3</button>
-                            <button class="px-3 py-2 rounded-lg bg-gray-700 text-gray-400 hover:bg-gray-600 transition-colors">Suivant</button>
-                        </div>
                     </div>
                 </div>
             </div>

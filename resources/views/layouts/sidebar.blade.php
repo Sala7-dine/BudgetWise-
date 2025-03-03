@@ -1,6 +1,6 @@
 <!-- Sidebar -->
 <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 border-r border-gray-700/50 shadow-xl transition-transform duration-300 transform"
->
+   >
     
     <!-- Logo et titre -->
     <div class="flex items-center h-16 px-6 border-b border-gray-700/50">
@@ -48,7 +48,7 @@
                 </a>
 
                 <!-- Utilisateurs -->
-                <a href="{{ route("admin.users.show") }}" 
+                <a href="{{ route('admin.users.show') }}" 
                    class="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-colors {{ 
                        request()->is('users*') 
                        ? 'bg-blue-600/10 text-blue-500' 
@@ -61,7 +61,7 @@
                 </a>
 
                 <!-- Catégories -->
-                <a href="{{ url('/categories') }}" 
+                <a href="{{ route("admin.categories.index") }}" 
                    class="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-colors {{ 
                        request()->is('categories*') 
                        ? 'bg-blue-600/10 text-blue-500' 
@@ -122,3 +122,5 @@
         </form>
     </div>
 </aside>
+
+

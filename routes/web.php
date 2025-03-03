@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,4 +35,8 @@ Route::middleware([
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.show');
     Route::patch('/admin/users/{user}/role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
     Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+    Route::resource('admin/categories', CategoryController::class)
+         ->names('admin.categories')
+         ->except(['show', 'edit', 'create']);
 // });
