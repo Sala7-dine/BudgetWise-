@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RecurringExpense;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class RecurringExpenseController extends Controller
 {
@@ -14,7 +15,7 @@ class RecurringExpenseController extends Controller
             'amount' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'frequency' => 'required|in:monthly,weekly,yearly',
-            'day_of_month' => 'required_if:frequency,monthly|nullable|numeric|min:1|max:31'
+            'day_of_month' => 'required_if:frequency,monthly|nullable|integer|min:1|max:31'
         ]);
 
         auth()->user()->recurringExpenses()->create($validated);
@@ -31,7 +32,7 @@ class RecurringExpenseController extends Controller
             'amount' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'frequency' => 'required|in:monthly,weekly,yearly',
-            'day_of_month' => 'required_if:frequency,monthly|nullable|numeric|min:1|max:31'
+            'day_of_month' => 'required_if:frequency,monthly|nullable|integer|min:1|max:31'
         ]);
 
         $recurringExpense->update($validated);

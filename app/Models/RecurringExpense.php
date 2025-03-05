@@ -3,22 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Expense extends Model
+class RecurringExpense extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'description',
+        'name',
         'amount',
+        'frequency',
+        'day_of_month',
         'category_id',
-        'date'
+        'last_generated'
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
-        'date' => 'date'
+        'last_generated' => 'date'
     ];
 
     public function user()

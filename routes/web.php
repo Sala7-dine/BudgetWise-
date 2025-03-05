@@ -7,6 +7,8 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\WishController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\RecurringExpenseController;
+use App\Http\Controllers\ExpenseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,7 +21,7 @@ Route::get('/home', function () {
 Route::get('/admin', function () {
     return view('dashboard/admin');
 })->name("admin");
-
+    
 
 Route::middleware(['auth'])->group(function () {
     // Dashboard route
@@ -27,6 +29,15 @@ Route::middleware(['auth'])->group(function () {
     
     // Salary route
     Route::patch('/user/salary', [SalaryController::class, 'update'])->name('user.salary.update');
+    
+    // Routes pour les dépenses récurrentes
+    Route::post('/recurring-expenses', [RecurringExpenseController::class, 'store'])->name('recurring-expenses.store');
+    Route::patch('/recurring-expenses/{recurringExpense}', [RecurringExpenseController::class, 'update'])->name('recurring-expenses.update');
+    Route::delete('/recurring-expenses/{recurringExpense}', [RecurringExpenseController::class, 'destroy'])->name('recurring-expenses.destroy');
+    
+    // Routes pour les dépenses
+    Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
 });
 
 Route::middleware([

@@ -1,5 +1,9 @@
 <x-main-layout>
-    <div x-data="{ showSalaryModal: false }">
+    <div x-data="{ 
+        showSalaryModal: false,
+        showRecurringModal: false,
+        frequency: 'monthly'
+    }">
         <!-- En-tête avec le bouton -->
         <div class="py-12 bg-gray-900 min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,6 +20,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         Modifier le salaire
+                    </button>
+                    <button @click="showRecurringModal = true" 
+                            class="px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Dépense récurrente
                     </button>
                 </div>
 
@@ -344,132 +356,95 @@
                             <h3 class="text-lg font-semibold text-white">Ajouter une dépense</h3>
                         </div>
                         
-                        <form class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <form action="{{ route('expenses.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            @csrf
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
-                                <input type="text" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" 
+                                       name="description" 
+                                       class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                                       required>
                             </div>
+                            
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Montant (DH)</label>
-                                <input type="number" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="number" 
+                                       name="amount" 
+                                       step="0.01"
+                                       class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                                       required>
                             </div>
+                            
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Catégorie</label>
-                                <select class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option>Nourriture</option>
-                                    <option>Transport</option>
-                                    <option>Divertissement</option>
-                                    <option>Shopping</option>
+                                <select name="category_id" 
+                                        class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                                        required>
+                                    <option value="">Sélectionner une catégorie</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
+                            
                             <div class="md:col-span-3">
-                                <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
+                                <button type="submit" 
+                                        class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
                                     Ajouter la dépense
                                 </button>
                             </div>
                         </form>
                     </div>
 
-                    <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-white">Historique des dépenses</h3>
-                            <div class="flex space-x-4">
-                                <select class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option>Tous les mois</option>
-                                    <option>Ce mois</option>
-                                    <option>Mois dernier</option>
-                                </select>
-                                <select class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option>Toutes les catégories</option>
-                                    <option>Nourriture</option>
-                                    <option>Transport</option>
-                                    <option>Divertissement</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="border-b border-gray-700">
-                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-400">Date</th>
-                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-400">Description</th>
-                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-400">Catégorie</th>
-                                        <th class="px-4 py-3 text-right text-sm font-medium text-gray-400">Montant</th>
-                                        <th class="px-4 py-3 text-right text-sm font-medium text-gray-400">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Exemple de ligne -->
-                                    <tr class="border-b border-gray-700 hover:bg-gray-700/30">
-                                        <td class="px-4 py-4 text-gray-300">Aujourd'hui</td>
-                                        <td class="px-4 py-4 text-white">Supermarché Marjane</td>
-                                        <td class="px-4 py-4">
-                                            <span class="px-2 py-1 bg-blue-900/20 text-blue-400 rounded-md text-xs">Nourriture</span>
-                                        </td>
-                                        <td class="px-4 py-4 text-right text-white font-medium">320 DH</td>
-                                        <td class="px-4 py-4 text-right">
-                                            <button class="text-blue-400 hover:text-blue-300">Modifier</button>
-                                            <button class="text-red-400 hover:text-red-300 ml-3">Supprimer</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    @include('dashboard.partials.expenses-table')
                 </div>
 
                 <!-- Onglet Objectifs -->
                 <div id="tab-objectifs" class="tab-content hidden">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Formulaire de nouvel objectif -->
                         <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-lg font-semibold text-white">Nouvel objectif</h3>
                             </div>
                             
-                            <form class="space-y-4">
+                            <form action="" method="POST" class="space-y-4">
+                                @csrf
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-2">Titre de l'objectif</label>
-                                    <input type="text" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="text" 
+                                           name="title"
+                                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                                           required>
                                 </div>
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-2">Montant cible (DH)</label>
-                                    <input type="number" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="number" 
+                                           name="target_amount"
+                                           step="0.01"
+                                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                                           required>
                                 </div>
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-2">Date limite</label>
-                                    <input type="date" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="date" 
+                                           name="target_date"
+                                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                                           required>
                                 </div>
-                                <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
+
+                                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
                                     Créer l'objectif
                                 </button>
                             </form>
                         </div>
 
+                        <!-- Liste des objectifs -->
                         <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg">
-                            <div class="flex items-center justify-between mb-6">
-                                <h3 class="text-lg font-semibold text-white">Progression des objectifs</h3>
-                            </div>
-                            
-                            <div class="space-y-6">
-                                <!-- Exemple d'objectif -->
-                                <div class="p-4 bg-gray-700/50 rounded-xl">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div>
-                                            <h4 class="text-white font-medium">Fond d'urgence</h4>
-                                            <p class="text-sm text-gray-400">Échéance: Décembre 2024</p>
-                                        </div>
-                                        <span class="text-white font-medium">5,000 / 10,000 DH</span>
-                                    </div>
-                                    <div class="w-full bg-gray-700 rounded-full h-2.5 mb-2">
-                                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 50%"></div>
-                                    </div>
-                                    <div class="flex justify-between text-xs text-gray-400">
-                                        <span>50% atteint</span>
-                                        <span>6 mois restants</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-6">Progression des objectifs</h3>
+                            <!-- ...reste du code... -->
                         </div>
                     </div>
                 </div>
@@ -551,7 +526,6 @@
                 <form action="{{ route('user.salary.update') }}" method="POST">
                     @csrf
                     @method('PATCH')
-                    
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Montant mensuel (DH)</label>
@@ -560,7 +534,7 @@
                                    value="{{ auth()->user()->salary ?? 0 }}"
                                    class="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-xl text-white">
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Jour de versement</label>
                             <input type="number" 
@@ -571,7 +545,7 @@
                                    class="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-xl text-white">
                         </div>
                     </div>
-
+                    
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" 
                                 @click="showSalaryModal = false"
@@ -585,30 +559,39 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div>    
+        
+        <!-- Inclure le modal des dépenses récurrentes -->
+        @include('dashboard.partials.modals.recurring-expense')
+        <!-- Inclure le modal du salaire -->
+        @include('dashboard.partials.modals.salary-modal')
     </div>
-    @include('dashboard.partials.modals.salary-modal')
-    <!-- Script pour le switch des onglets -->
-    <script>
-    function switchTab(tabName) {
-        // Cacher tous les contenus
+</x-main-layout>
+
+<script>
+    function switchTab(tabId) {
+        // Cacher tous les contenus des onglets
         document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.add('hidden');
         });
-        
-        // Réinitialiser tous les boutons
+
+        // Réinitialiser tous les styles des boutons
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('text-blue-400', 'border-b-2', 'border-blue-400');
+            btn.classList.remove('text-blue-400', 'border-b-2', 'border-blue-400', 'font-medium');
             btn.classList.add('text-gray-400');
         });
-        
-        // Afficher le contenu sélectionné
-        document.getElementById('tab-' + tabName).classList.remove('hidden');
-        
-        // Activer le bouton sélectionné
-        const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
-        activeBtn.classList.remove('text-gray-400');
-        activeBtn.classList.add('text-blue-400', 'border-b-2', 'border-blue-400');
+
+        // Afficher le contenu de l'onglet sélectionné
+        document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+        // Mettre à jour le style du bouton sélectionné
+        const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
+        activeButton.classList.remove('text-gray-400');
+        activeButton.classList.add('text-blue-400', 'border-b-2', 'border-blue-400', 'font-medium');
     }
-    </script>
-</x-main-layout>
+
+    // Initialiser l'onglet par défaut au chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+        switchTab('apercu');
+    });
+</script>

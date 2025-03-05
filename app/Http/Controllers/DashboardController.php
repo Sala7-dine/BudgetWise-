@@ -41,13 +41,31 @@ class DashboardController extends Controller
             $daysUntilSalary = $now->diffInDays($nextSalaryDate, false);
         }
 
+        // Récupérer les catégories pour le formulaire
+        $categories = Category::all();
+
+        // Récupérer les dépenses récurrentes
+        $recurringExpenses = $user->recurringExpenses()
+            ->with('category')
+            ->orderBy('amount', 'desc')
+            ->get();
+
+        // Récupérer les dépenses pour le tableau
+        $expenses = $user->expenses()
+            ->with('category')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+
         return view('dashboard.user', compact(
             'salary',
             'monthlyExpenses',
             'remainingBudget',
             'budgetPercentage',
             'nextSalaryDate',
-            'daysUntilSalary'
+            'daysUntilSalary',
+            'categories',
+            'recurringExpenses',
+            'expenses'
         ));
     }
 

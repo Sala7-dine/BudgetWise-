@@ -11,12 +11,10 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('category_id')->constrained();
+            $table->string('description');
             $table->decimal('amount', 10, 2);
-            $table->string('description')->nullable();
-            $table->datetime('date');
-            $table->string('payment_method')->nullable(); // cash, card, transfer, etc.
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('completed');
+            $table->date('date');
             $table->timestamps();
         });
     }
@@ -25,4 +23,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('expenses');
     }
-}; 
+};

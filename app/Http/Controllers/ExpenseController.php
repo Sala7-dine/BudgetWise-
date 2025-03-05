@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ExpenseController extends Controller
 {
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
-            'date' => 'required|date',
         ]);
 
+        $validated['date'] = Carbon::now();
+        
         auth()->user()->expenses()->create($validated);
 
         return back()->with('success', 'Dépense ajoutée avec succès.');
@@ -40,9 +43,7 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense)
     {
         $this->authorize('delete', $expense);
-        
         $expense->delete();
-
         return back()->with('success', 'Dépense supprimée avec succès.');
     }
 }

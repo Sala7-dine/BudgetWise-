@@ -86,4 +86,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
+    /**
+     * Get the recurring expenses for the user.
+     */
+    public function recurringExpenses()
+    {
+        return $this->hasMany(RecurringExpense::class);
+    }
 }
