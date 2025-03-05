@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        // Empêcher la suppression de son propre compte
+
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
         }

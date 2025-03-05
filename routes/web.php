@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GoalController;
+use App\Http\Controllers\WishController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SalaryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,10 +20,14 @@ Route::get('/admin', function () {
     return view('dashboard/admin');
 })->name("admin");
 
-Route::get('/user', function () {
-    return view('dashboard/user');
-});
 
+Route::middleware(['auth'])->group(function () {
+    // Dashboard route
+    Route::get('/user', [DashboardController::class, 'index'])->name('user.dashboard');
+    
+    // Salary route
+    Route::patch('/user/salary', [SalaryController::class, 'update'])->name('user.salary.update');
+});
 
 Route::middleware([
     'auth:sanctum',
@@ -40,3 +48,8 @@ Route::middleware([
          ->names('admin.categories')
          ->except(['show', 'edit', 'create']);
 // });
+
+Route::middleware(['auth'])->group(function () {
+    // Route pour la mise à jour du salaire
+    Route::patch('/user/salary', [SalaryController::class, 'update'])->name('user.salary.update');
+});

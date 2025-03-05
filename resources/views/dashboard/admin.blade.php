@@ -4,7 +4,7 @@
             <!-- En-tête du tableau de bord -->
             <div class="mb-10">
                 <h1 class="text-3xl font-bold text-white">Tableau de bord administrateur</h1>
-                <p class="text-gray-400 mt-2">Gérez l'application MoneyMind et suivez les performances globales</p>
+                <p class="text-gray-400 mt-2">Gérez l'application BudgetWise et suivez les performances globales</p>
             </div>
 
             <!-- Cartes de statistiques principales -->

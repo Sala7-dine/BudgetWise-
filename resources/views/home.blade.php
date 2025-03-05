@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MoneyMind - Votre Assistant Financier Intelligent</title>
+    <title>BudgetWise - Votre Assistant Financier Intelligent</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="antialiased">
@@ -12,7 +12,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
-                    <img class="h-10 w-auto" src="/logo.svg" alt="MoneyMind Logo">
+                    <img class="h-10 w-auto" src="/logo.svg" alt="BudgetWise Logo">
                 </div>
                 <div class="flex items-center space-x-6">
                     @if (Route::has('login'))
@@ -68,7 +68,7 @@
                         </span>
                     </h1>
                     <p class="text-xl text-gray-300 mb-8">
-                        Découvrez une nouvelle façon de gérer votre argent avec MoneyMind. Suivi intelligent, objectifs personnalisés et conseils IA en temps réel.
+                        Découvrez une nouvelle façon de gérer votre argent avec BudgetWise. Suivi intelligent, objectifs personnalisés et conseils IA en temps réel.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-8 py-4 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
@@ -267,7 +267,7 @@
                             Prêt à transformer votre gestion financière ?
                         </h2>
                         <p class="text-xl text-gray-300 mb-8">
-                            Rejoignez des milliers d'utilisateurs qui ont déjà pris le contrôle de leurs finances avec MoneyMind.
+                            Rejoignez des milliers d'utilisateurs qui ont déjà pris le contrôle de leurs finances avec BudgetWise.
                         </p>
                         <ul class="space-y-4 mb-8">
                             <li class="flex items-center text-gray-300">
@@ -314,7 +314,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
-                    <img class="h-8 w-auto mb-4" src="/logo.svg" alt="MoneyMind Logo">
+                    <img class="h-8 w-auto mb-4" src="/logo.svg" alt="BudgetWise Logo">
                     <p class="text-gray-400">Votre assistant financier intelligent pour une meilleure gestion de votre argent.</p>
                 </div>
                 <div>
@@ -358,7 +358,7 @@
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-                <p>&copy; {{ date('Y') }} MoneyMind. Tous droits réservés.</p>
+                <p>&copy; {{ date('Y') }} BudgetWise. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
