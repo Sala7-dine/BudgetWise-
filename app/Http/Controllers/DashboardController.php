@@ -20,17 +20,16 @@ class DashboardController extends Controller
         $startOfMonth = $now->startOfMonth();
         $endOfMonth = $now->copy()->endOfMonth();
 
-        // Salaire et calculs
+        // Salaire et calculs de budget
         $salary = $user->salary ?? 0;
         $monthlyExpenses = $user->expenses()
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
-            ->sum('amount') ?? 0;
+            ->sum('amount');
         
-        // Calcul du revenu restant
         $remainingBudget = $salary - $monthlyExpenses;
         $budgetPercentage = $salary > 0 ? ($monthlyExpenses / $salary) * 100 : 0;
 
-        // Date du prochain salaire
+        // Calcul de la prochaine date de salaire
         $nextSalaryDate = null;
         $daysUntilSalary = null;
         if ($user->salary_day) {
@@ -41,16 +40,21 @@ class DashboardController extends Controller
             $daysUntilSalary = $now->diffInDays($nextSalaryDate, false);
         }
 
-        // Récupérer les catégories pour le formulaire
-        $categories = Category::all();
-
-        // Récupérer les dépenses récurrentes
-        $recurringExpenses = $user->recurringExpenses()
+        // Récupération des dépenses par catégorie
+        $expensesByCategory = $user->expenses()
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->select('category_id', DB::raw('SUM(amount) as total'))
+            ->groupBy('category_id')
             ->with('category')
-            ->orderBy('amount', 'desc')
             ->get();
 
-        // Récupérer les dépenses pour le tableau
+        // Récupération des données nécessaires
+        $goals = $user->goals()->orderBy('deadline')->get();
+
+        // Modification temporaire en attendant la migration
+        $categories = Category::all();
+
+        $recurringExpenses = $user->recurringExpenses()->with('category')->get();
         $expenses = $user->expenses()
             ->with('category')
             ->orderBy('date', 'desc')
@@ -63,14 +67,11 @@ class DashboardController extends Controller
             'budgetPercentage',
             'nextSalaryDate',
             'daysUntilSalary',
+            'expensesByCategory',
+            'goals',
             'categories',
             'recurringExpenses',
             'expenses'
         ));
-    }
-
-    private function generateAISuggestions($user)
-    {
-        // ...existing code...
     }
 }

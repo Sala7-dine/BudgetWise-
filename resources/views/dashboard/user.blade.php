@@ -400,54 +400,7 @@
                 </div>
 
                 <!-- Onglet Objectifs -->
-                <div id="tab-objectifs" class="tab-content hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Formulaire de nouvel objectif -->
-                        <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg">
-                            <div class="flex items-center justify-between mb-6">
-                                <h3 class="text-lg font-semibold text-white">Nouvel objectif</h3>
-                            </div>
-                            
-                            <form action="" method="POST" class="space-y-4">
-                                @csrf
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Titre de l'objectif</label>
-                                    <input type="text" 
-                                           name="title"
-                                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
-                                           required>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Montant cible (DH)</label>
-                                    <input type="number" 
-                                           name="target_amount"
-                                           step="0.01"
-                                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
-                                           required>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Date limite</label>
-                                    <input type="date" 
-                                           name="target_date"
-                                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
-                                           required>
-                                </div>
-
-                                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
-                                    Créer l'objectif
-                                </button>
-                            </form>
-                        </div>
-
-                        <!-- Liste des objectifs -->
-                        <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg">
-                            <h3 class="text-lg font-semibold text-white mb-6">Progression des objectifs</h3>
-                            <!-- ...reste du code... -->
-                        </div>
-                    </div>
-                </div>
+                @include('dashboard.partials.goals-tab')
 
                 <!-- Onglet Liste de souhaits -->
                 <div id="tab-souhaits" class="tab-content hidden">

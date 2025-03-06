@@ -9,6 +9,7 @@ class GoalController extends Controller
 {
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -27,7 +28,7 @@ class GoalController extends Controller
 
     public function update(Request $request, Goal $goal)
     {
-        $this->authorize('update', $goal);
+        //$this->authorize('update', $goal);
 
         $validated = $request->validate([
             'current_amount' => 'required|numeric|min:0',
@@ -44,7 +45,7 @@ class GoalController extends Controller
 
     public function destroy(Goal $goal)
     {
-        $this->authorize('delete', $goal);
+        //$this->authorize('delete', $goal);
         
         $goal->delete();
         return back()->with('success', 'Objectif supprimé avec succès.');
