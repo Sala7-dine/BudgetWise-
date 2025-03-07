@@ -1,4 +1,40 @@
 <x-main-layout>
+    @if(session('error'))
+    <div class="fixed top-4 right-4 z-50 p-4 rounded-lg bg-red-500 text-white shadow-lg transform transition-all duration-500" 
+         x-data="{ show: true }"
+         x-show="show"
+         x-init="setTimeout(() => show = false, 5000)">
+        <div class="flex items-center space-x-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <span>{{ session('error') }}</span>
+            <button @click="show = false" class="text-white hover:text-red-100">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    @endif
+    @if(session('success'))
+    <div class="fixed top-4 right-4 z-50 p-4 rounded-lg bg-green-500 text-white shadow-lg transform transition-all duration-500"
+         x-data="{ show: true }"
+         x-show="show"
+         x-init="setTimeout(() => show = false, 5000)">
+        <div class="flex items-center space-x-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>{{ session('success') }}</span>
+            <button @click="show = false" class="text-white hover:text-green-100">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    @endif
     <div x-data="{ 
         showSalaryModal: false,
         showRecurringModal: false,
@@ -143,7 +179,6 @@
 
                 <!-- Contenu des onglets -->
                 <div id="tab-apercu" class="tab-content">
-                    <!-- Contenu de l'aperçu -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <!-- Suggestion IA -->
                         <div class="lg:col-span-2">
@@ -156,7 +191,7 @@
                                     </div>
                                     <div>
                                         <h3 class="text-lg font-semibold text-white mb-2">Suggestion de MoneyMind IA</h3>
-                                        <p class="text-gray-300 mb-4">Basé sur vos habitudes de dépenses, vous pourriez économiser jusqu'à <span class="text-blue-400 font-medium">450 DH</span> ce mois-ci en réduisant vos dépenses de divertissement de 20%.</p>
+                                        <p class="text-gray-300 mb-4"> <?php  echo(str_replace("*","",$suggestions)) ?> </p>
                                         <div class="flex space-x-3">
                                             <button class="px-4 py-2 bg-blue-600/20 text-blue-400 rounded-lg hover:bg-blue-600/30 transition-colors">
                                                 Voir les détails
@@ -177,65 +212,22 @@
                                 </div>
                                 
                                 <div class="space-y-4">
+                                    @foreach($expenses->take(4) as $expense)
                                     <div class="flex items-center justify-between p-3 hover:bg-gray-700/30 rounded-xl transition-colors">
                                         <div class="flex items-center space-x-4">
-                                            <div class="w-10 h-10 bg-blue-900/50 rounded-xl flex items-center justify-center">
-                                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            <div class="w-10 h-10 bg-{{ $expense->category->color ?? 'blue' }}-900/50 rounded-xl flex items-center justify-center">
+                                                <svg class="w-5 h-5 text-{{ $expense->category->color ?? 'blue' }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    {!! $expense->category->icon ?? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>' !!}
                                                 </svg>
                                             </div>
                                             <div>
-                                                <div class="text-white font-medium">Supermarché Marjane</div>
-                                                <div class="text-sm text-gray-400">Nourriture • Aujourd'hui</div>
+                                                <div class="text-white font-medium">{{ $expense->description }}</div>
+                                                <div class="text-sm text-gray-400">{{ $expense->category->name }} • {{ $expense->created_at->diffForHumans() }}</div>
                                             </div>
                                         </div>
-                                        <div class="text-white font-medium">-320 DH</div>
+                                        <div class="text-white font-medium">-{{ number_format($expense->amount, 0) }} DH</div>
                                     </div>
-                                    
-                                    <div class="flex items-center justify-between p-3 hover:bg-gray-700/30 rounded-xl transition-colors">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="w-10 h-10 bg-purple-900/50 rounded-xl flex items-center justify-center">
-                                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <div class="text-white font-medium">Cinéma Megarama</div>
-                                                <div class="text-sm text-gray-400">Divertissement • Hier</div>
-                                            </div>
-                                        </div>
-                                        <div class="text-white font-medium">-120 DH</div>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between p-3 hover:bg-gray-700/30 rounded-xl transition-colors">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="w-10 h-10 bg-red-900/50 rounded-xl flex items-center justify-center">
-                                                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <div class="text-white font-medium">Taxi</div>
-                                                <div class="text-sm text-gray-400">Transport • 2 jours</div>
-                                            </div>
-                                        </div>
-                                        <div class="text-white font-medium">-75 DH</div>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between p-3 hover:bg-gray-700/30 rounded-xl transition-colors">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="w-10 h-10 bg-green-900/50 rounded-xl flex items-center justify-center">
-                                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <div class="text-white font-medium">Vêtements Zara</div>
-                                                <div class="text-sm text-gray-400">Shopping • 3 jours</div>
-                                            </div>
-                                        </div>
-                                        <div class="text-white font-medium">-450 DH</div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -248,63 +240,46 @@
                                 <div class="relative h-48 mb-6">
                                     <div class="absolute inset-0 flex items-center justify-center">
                                         <svg viewBox="0 0 100 100" class="w-full h-full">
-                                            <!-- Segments du graphique -->
-                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3b82f6" stroke-width="16" stroke-dasharray="75 100" stroke-dashoffset="25" />
-                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#8b5cf6" stroke-width="16" stroke-dasharray="50 100" stroke-dashoffset="100" />
-                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#ef4444" stroke-width="16" stroke-dasharray="35 100" stroke-dashoffset="150" />
-                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#10b981" stroke-width="16" stroke-dasharray="15 100" stroke-dashoffset="185" />
+                                            @php
+                                                $offset = 0;
+                                                $colors = ['blue', 'purple', 'red', 'green'];
+                                            @endphp
+                                            @foreach($expensesByCategory as $index => $expense)
+                                                @php
+                                                    $percentage = ($expense->total / $monthlyExpenses) * 100;
+                                                    $dasharray = $percentage;
+                                                    $color = $colors[$index % count($colors)];
+                                                @endphp
+                                                <circle cx="50" cy="50" r="40" fill="transparent" 
+                                                        stroke="#{{ $color === 'blue' ? '3b82f6' : ($color === 'purple' ? '8b5cf6' : ($color === 'red' ? 'ef4444' : '10b981')) }}" 
+                                                        stroke-width="16" 
+                                                        stroke-dasharray="{{ $dasharray }} 100" 
+                                                        stroke-dashoffset="{{ $offset }}" />
+                                                @php
+                                                    $offset += $dasharray;
+                                                @endphp
+                                            @endforeach
                                         </svg>
                                         <div class="absolute text-center">
-                                            <div class="text-2xl font-bold text-white">2,550</div>
+                                            <div class="text-2xl font-bold text-white">{{ number_format($monthlyExpenses, 0) }}</div>
                                             <div class="text-sm text-gray-400">DH dépensés</div>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="space-y-3">
+                                    @foreach($expensesByCategory as $index => $expense)
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
-                                            <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                                            <span class="text-gray-300">Nourriture</span>
+                                            <div class="w-3 h-3 bg-{{ $colors[$index % count($colors)] }}-500 rounded-full mr-2"></div>
+                                            <span class="text-gray-300">{{ $expense->category->name }}</span>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <span class="text-white font-medium">765 DH</span>
-                                            <span class="text-gray-400 text-sm">30%</span>
+                                            <span class="text-white font-medium">{{ number_format($expense->total, 0) }} DH</span>
+                                            <span class="text-gray-400 text-sm">{{ number_format(($expense->total / $monthlyExpenses) * 100, 1) }}%</span>
                                         </div>
                                     </div>
-                                    
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
-                                            <span class="text-gray-300">Divertissement</span>
-                                        </div>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="text-white font-medium">637 DH</span>
-                                            <span class="text-gray-400 text-sm">25%</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                                            <span class="text-gray-300">Transport</span>
-                                        </div>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="text-white font-medium">510 DH</span>
-                                            <span class="text-gray-400 text-sm">20%</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center">
-                                            <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                                            <span class="text-gray-300">Autres</span>
-                                        </div>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="text-white font-medium">638 DH</span>
-                                            <span class="text-gray-400 text-sm">25%</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                             
@@ -316,33 +291,21 @@
                                 </div>
                                 
                                 <div class="space-y-5">
+                                    @foreach($goals as $goal)
                                     <div>
                                         <div class="flex justify-between mb-2">
-                                            <span class="text-gray-300">Téléphone</span>
-                                            <span class="text-white font-medium">150 / 1500 DH</span>
+                                            <span class="text-gray-300">{{ $goal->title }}</span>
+                                            <span class="text-white font-medium">{{ number_format($goal->current_amount, 0) }} / {{ number_format($goal->target_amount, 0) }} DH</span>
                                         </div>
                                         <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                            <div class="bg-blue-500 h-2.5 rounded-full" style="width: 10%"></div>
+                                            <div class="bg-blue-500 h-2.5 rounded-full" style="width: {{ ($goal->current_amount / $goal->target_amount) * 100 }}%"></div>
                                         </div>
                                         <div class="flex justify-between mt-1 text-xs text-gray-400">
-                                            <span>10%</span>
-                                            <span>5 mois restants</span>
+                                            <span>{{ number_format(($goal->current_amount / $goal->target_amount) * 100, 0) }}%</span>
+                                            <span>{{ $goal->deadline ? $goal->deadline->diffForHumans() : 'Pas de date limite' }}</span>
                                         </div>
                                     </div>
-                                    
-                                    <div>
-                                        <div class="flex justify-between mb-2">
-                                            <span class="text-gray-300">Vacances</span>
-                                            <span class="text-white font-medium">2000 / 5000 DH</span>
-                                        </div>
-                                        <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                            <div class="bg-green-500 h-2.5 rounded-full" style="width: 40%"></div>
-                                        </div>
-                                        <div class="flex justify-between mt-1 text-xs text-gray-400">
-                                            <span>40%</span>
-                                            <span>3 mois restants</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

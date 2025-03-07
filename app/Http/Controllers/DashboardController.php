@@ -10,9 +10,16 @@ use App\Models\RecurringExpense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Services\GeminiService;
 
 class DashboardController extends Controller
 {
+    protected $geminiService;
+
+    public function __construct(GeminiService $geminiService)
+    {
+        $this->geminiService = $geminiService;
+    }
     public function index(){
 
         $user = auth()->user();
@@ -29,6 +36,7 @@ class DashboardController extends Controller
         $remainingBudget = $salary - $monthlyExpenses;
         $budgetPercentage = $salary > 0 ? ($monthlyExpenses / $salary) * 100 : 0;
 
+        
         // Calcul de la prochaine date de salaire
         $nextSalaryDate = null;
         $daysUntilSalary = null;
@@ -62,7 +70,7 @@ class DashboardController extends Controller
             ->with('category')
             ->orderBy('date', 'desc')
             ->paginate(10);
-
+            $suggestions = nl2br($this->geminiService->getSuggestions($expenses, $recurringExpenses, $salary));
         return view('dashboard.user', compact(
             'salary',
             'monthlyExpenses',
@@ -75,7 +83,8 @@ class DashboardController extends Controller
             'categories',
             'recurringExpenses',
             'expenses',
-            'wishes'
+            'wishes',
+            'suggestions'
             
         ));
     }
