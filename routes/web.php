@@ -9,15 +9,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\RecurringExpenseController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Middleware\AdminMiddleware;
 
 // Routes publiques
-Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/admin', function () {
-    return view('dashboard/admin');
-})->name("admin");
+Route::get('/', function () { return view('home'); });
 
 Route::middleware(['auth'])->group(function () {
     // Dashboard
@@ -45,16 +40,20 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/{goal}', [GoalController::class, 'update'])->name('update');
         Route::delete('/{goal}', [GoalController::class, 'destroy'])->name('destroy');
     });
+
+    // Souhaits
+    Route::resource('wishes', WishController::class)->except(['index', 'create', 'edit', 'show']);
 });
 
 // Routes administration
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('users', [UserController::class, 'index'])->name('users.show');
-    Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
-    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+    Route::get('/admin', function () {return view('dashboard/admin'); })->name("admin");
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.show');
+    Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
     Route::resource('categories', CategoryController::class)
-         ->names('categories')
+         ->names('admin.categories')
          ->except(['show', 'edit', 'create']);
 });
 

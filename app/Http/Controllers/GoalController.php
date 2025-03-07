@@ -15,6 +15,7 @@ class GoalController extends Controller
             'description' => 'nullable|string',
             'target_amount' => 'required|numeric|min:0',
             'deadline' => 'required|date|after:today',
+            'auto_save_percentage' => 'required|numeric|min:0|max:100', // Nouvelle validation
         ]);
 
         $goal = auth()->user()->goals()->create([
@@ -31,14 +32,10 @@ class GoalController extends Controller
         //$this->authorize('update', $goal);
 
         $validated = $request->validate([
-            'current_amount' => 'required|numeric|min:0',
+            'target_amount' => 'required|numeric|min:0',
         ]);
 
         $goal->update($validated);
-
-        if ($goal->current_amount >= $goal->target_amount) {
-            $goal->update(['status' => 'completed']);
-        }
 
         return back()->with('success', 'Progression mise à jour avec succès.');
     }

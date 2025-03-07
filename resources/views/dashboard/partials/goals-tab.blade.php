@@ -40,6 +40,21 @@
                            required>
                 </div>
 
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Pourcentage d'épargne automatique mensuelle
+                        <span class="text-gray-400 text-xs">(% du salaire)</span>
+                    </label>
+                    <input type="number" 
+                           name="auto_save_percentage"
+                           min="0"
+                           max="100"
+                           step="0.01"
+                           class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
+                           required
+                           value="0">
+                </div>
+
                 <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
                     Créer l'objectif
                 </button>
@@ -96,8 +111,8 @@
                             @csrf
                             @method('PATCH')
                             <input type="number" 
-                                   name="current_amount" 
-                                   value="{{ $goal->current_amount }}"
+                                   name="target_amount" 
+                                   value="{{ $goal->target_amount }}"
                                    step="0.01"
                                    class="flex-1 px-3 py-1 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm">
                             <button type="submit" 

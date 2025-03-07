@@ -13,8 +13,8 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
+    public function index(){
+
         $user = auth()->user();
         $now = Carbon::now();
         $startOfMonth = $now->startOfMonth();
@@ -54,6 +54,9 @@ class DashboardController extends Controller
         // Modification temporaire en attendant la migration
         $categories = Category::all();
 
+
+        $wishes = $user->wishes()->orderBy('priority')->get();
+
         $recurringExpenses = $user->recurringExpenses()->with('category')->get();
         $expenses = $user->expenses()
             ->with('category')
@@ -71,7 +74,9 @@ class DashboardController extends Controller
             'goals',
             'categories',
             'recurringExpenses',
-            'expenses'
+            'expenses',
+            'wishes'
+            
         ));
     }
 }

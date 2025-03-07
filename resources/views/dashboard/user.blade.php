@@ -401,64 +401,10 @@
 
                 <!-- Onglet Objectifs -->
                 @include('dashboard.partials.goals-tab')
-
+                
                 <!-- Onglet Liste de souhaits -->
-                <div id="tab-souhaits" class="tab-content hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Formulaire d'ajout -->
-                        <div class="md:col-span-3 bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg mb-6">
-                            <div class="flex items-center justify-between mb-6">
-                                <h3 class="text-lg font-semibold text-white">Ajouter un souhait</h3>
-                            </div>
-                            
-                            <form class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Article</label>
-                                    <input type="text" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Prix estimé (DH)</label>
-                                    <input type="number" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-300 mb-2">Priorité</label>
-                                    <select class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option>Basse</option>
-                                        <option>Moyenne</option>
-                                        <option>Haute</option>
-                                    </select>
-                                </div>
-                                <div class="md:col-span-3">
-                                    <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
-                                        Ajouter à la liste
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Cartes des souhaits -->
-                        <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg">
-                            <div class="relative group">
-                                <img src="/images/phone-example.jpg" alt="Smartphone" class="w-full h-48 object-cover rounded-xl mb-4">
-                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent rounded-xl"></div>
-                                <div class="absolute bottom-4 left-4">
-                                    <h4 class="text-white font-medium">iPhone 15</h4>
-                                    <p class="text-sm text-gray-300">12,000 DH</p>
-                                </div>
-                                <span class="absolute top-4 right-4 px-2 py-1 bg-red-500/20 text-red-400 rounded-lg text-xs">Priorité haute</span>
-                            </div>
-                            <div class="mt-4">
-                                <div class="flex justify-between text-sm text-gray-400 mb-2">
-                                    <span>Progression</span>
-                                    <span>2,400 / 12,000 DH</span>
-                                </div>
-                                <div class="w-full bg-gray-700 rounded-full h-2">
-                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 20%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @include('dashboard.partials.wishs-tab')
+                
             </div>
         </div>
 

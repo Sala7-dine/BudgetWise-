@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->decimal('estimated_cost', 10, 2);
+            $table->decimal('saved_amount', 10, 2)->default(0);
+            $table->decimal('auto_save_percentage', 5, 2)->default(0);
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->enum('status', ['pending', 'achieved', 'cancelled'])->default('pending');
             $table->timestamps();

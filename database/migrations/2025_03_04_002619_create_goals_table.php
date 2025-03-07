@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('target_amount', 10, 2);
             $table->decimal('current_amount', 10, 2)->default(0);
+            $table->decimal('auto_save_percentage', 5, 2)->default(0); // Nouveau champ
             $table->date('deadline');
             $table->enum('status', ['in_progress', 'completed', 'failed'])->default('in_progress');
             $table->timestamps();

@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -26,4 +27,15 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
+
+
+    protected function schedule(Schedule $schedule)
+    {
+        // Pour les tests : exécution chaque minute
+        $schedule->command('autosave:process')->everyMinute();
+        $schedule->command('autosave:wishes')->everyMinute();
+        
+        // Commenté temporairement
+        // $schedule->command('autosave:process')->monthlyOn(1, '00:00');
+    }
 }
