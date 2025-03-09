@@ -24,13 +24,13 @@ class UserController extends Controller
 
         $user->update([
             'role' => $request->role,
+            'is_admin' => $request->role === 'admin',
         ]);
 
         return back()->with('success', 'Rôle mis à jour avec succès.');
     }
 
-    public function destroy(User $user)
-    {
+    public function destroy(User $user){
 
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');

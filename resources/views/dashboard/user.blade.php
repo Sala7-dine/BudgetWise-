@@ -177,6 +177,9 @@
                                 <button onclick="switchTab('depenses')" class="tab-btn px-1 py-4 text-gray-400 hover:text-gray-300" data-tab="depenses">
                                     Dépenses
                                 </button>
+                                <button onclick="switchTab('recurring')" class="tab-btn px-1 py-4 text-gray-400 hover:text-gray-300" data-tab="recurring">
+                                    Dépenses récurrentes
+                                </button>
                                 <button onclick="switchTab('objectifs')" class="tab-btn px-1 py-4 text-gray-400 hover:text-gray-300" data-tab="objectifs">
                                     Objectifs
                                 </button>
@@ -321,55 +324,11 @@
                             </div>
                         </div>
 
-                        <!-- Onglet Dépenses -->
-                        <div id="tab-depenses" class="tab-content hidden">
-                            <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg mb-6">
-                                <div class="flex items-center justify-between mb-6">
-                                    <h3 class="text-lg font-semibold text-white">Ajouter une dépense</h3>
-                                </div>
-                                
-                                <form action="{{ route('expenses.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    @csrf
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
-                                        <input type="text" 
-                                               name="description" 
-                                               class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
-                                               required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Montant (DH)</label>
-                                        <input type="number" 
-                                               name="amount" 
-                                               step="0.01"
-                                               class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
-                                               required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-300 mb-2">Catégorie</label>
-                                        <select name="category_id" 
-                                                class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white"
-                                                required>
-                                            <option value="">Sélectionner une catégorie</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="md:col-span-3">
-                                        <button type="submit" 
-                                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors">
-                                            Ajouter la dépense
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                        <!-- Onglet Dépenses récurrentes -->
+                        @include('dashboard.partials.recurring-expenses-tab')
 
-                            @include('dashboard.partials.expenses-table')
-                        </div>
+                        <!-- Onglet Dépenses -->
+                        @include('dashboard.partials.expenses-tab')
 
                         <!-- Onglet Objectifs -->
                         @include('dashboard.partials.goals-tab')
