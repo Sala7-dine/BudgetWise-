@@ -151,53 +151,173 @@
             <div class="bg-gray-800 rounded-3xl border border-gray-700/50 shadow-xl overflow-hidden">
                 <!-- Navigation par onglets -->
                 <div class="flex border-b border-gray-700">
-                    <button class="px-6 py-4 text-white bg-gray-700 font-medium">Utilisateurs</button>
-                    <button class="px-6 py-4 text-gray-400 hover:text-white transition-colors">Catégories</button>
-                    <button class="px-6 py-4 text-gray-400 hover:text-white transition-colors">Statistiques</button>
+                    <button onclick="switchAdminTab('users')" class="tab-btn px-6 py-4 text-gray-400 hover:text-white transition-colors">Utilisateurs</button>
+                    <button onclick="switchAdminTab('categories')" class="tab-btn px-6 py-4 text-gray-400 hover:text-white transition-colors">Catégories</button>
+                    <button onclick="switchAdminTab('statistics')" class="tab-btn px-6 py-4 text-white bg-gray-700 font-medium">Statistiques</button>
                 </div>
 
-                <!-- Contenu du tableau -->
-                <div class="p-6">
-                    <!-- En-tête avec recherche et filtres -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                        <div class="relative flex-1 max-w-md mb-4 md:mb-0">
-                            <input type="text" placeholder="Rechercher un utilisateur..." class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <svg class="w-5 h-5 text-gray-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
+                <!-- Contenu des onglets -->
+                <div id="tab-statistics" class="p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Graphique des utilisateurs -->
+                        <div class="bg-gray-700/50 rounded-2xl p-6">
+                            <h3 class="text-lg font-medium text-white mb-4">Évolution des utilisateurs</h3>
+                            <div class="h-80">
+                                <canvas id="usersChart"></canvas>
+                            </div>
                         </div>
-                        <div class="flex space-x-3">
-                            <button class="px-4 py-2 bg-gray-700 text-gray-300 rounded-xl hover:bg-gray-600 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                                </svg>
-                            </button>
-                            <button class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
-                                Exporter
-                            </button>
-                        </div>
-                    </div>
 
-                    <!-- Tableau des utilisateurs -->
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr class="text-left text-gray-400 text-sm">
-                                    <th class="pb-4 font-medium">Utilisateur</th>
-                                    <th class="pb-4 font-medium">Statut</th>
-                                    <th class="pb-4 font-medium">Économies</th>
-                                    <th class="pb-4 font-medium">Dernière activité</th>
-                                    <th class="pb-4 font-medium">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-300">
-                                <!-- Lignes du tableau -->
-                                <!-- ... -->
-                            </tbody>
-                        </table>
+                        <!-- Graphique des transactions -->
+                        <div class="bg-gray-700/50 rounded-2xl p-6">
+                            <h3 class="text-lg font-medium text-white mb-4">Volume des transactions</h3>
+                            <div class="h-80">
+                                <canvas id="transactionsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Distribution des catégories -->
+                        <div class="bg-gray-700/50 rounded-2xl p-6">
+                            <h3 class="text-lg font-medium text-white mb-4">Distribution des catégories</h3>
+                            <div class="h-80">
+                                <canvas id="categoriesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Tendances d'épargne -->
+                        <div class="bg-gray-700/50 rounded-2xl p-6">
+                            <h3 class="text-lg font-medium text-white mb-4">Tendances d'épargne</h3>
+                            <div class="h-80">
+                                <canvas id="savingsChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+              
             </div>
         </div>
     </div>
 </x-app-layout>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function initCharts() {
+        // Configuration commune
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'rgba(255, 255, 255, 0.7)'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: 'rgba(255, 255, 255, 0.7)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: 'rgba(255, 255, 255, 0.7)'
+                    }
+                }
+            }
+        };
+
+        // Graphique des utilisateurs
+        new Chart(document.getElementById('usersChart'), {
+            type: 'line',
+            data: {
+                labels: {!! json_encode(array_keys($stats['monthlyGrowth'])) !!},
+                datasets: [{
+                    label: 'Nouveaux utilisateurs',
+                    data: {!! json_encode(array_values($stats['monthlyGrowth'])) !!},
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Graphique des transactions
+        new Chart(document.getElementById('transactionsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+                datasets: [{
+                    label: 'Volume des transactions',
+                    data: [30000, 45000, 38000, 52000, 48000, 60000],
+                    backgroundColor: 'rgba(139, 92, 246, 0.8)'
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Distribution des catégories
+        new Chart(document.getElementById('categoriesChart'), {
+            type: 'doughnut',
+            data: {
+                labels: {!! json_encode($stats['categories']['stats']->pluck('name')) !!},
+                datasets: [{
+                    data: {!! json_encode($stats['categories']['stats']->pluck('expenses_count')) !!},
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(245, 158, 11, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                ...commonOptions,
+                cutout: '70%'
+            }
+        });
+
+        // Tendances d'épargne
+        new Chart(document.getElementById('savingsChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+                datasets: [{
+                    label: 'Moyenne des économies',
+                    data: [5000, 7000, 6500, 8000, 9500, 11000],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: commonOptions
+        });
+    }
+
+    // Initialisation des graphiques au chargement
+    document.addEventListener('DOMContentLoaded', initCharts);
+
+    // Fonction de changement d'onglet
+    function switchAdminTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('text-white', 'bg-gray-700', 'font-medium');
+            btn.classList.add('text-gray-400');
+        });
+
+        const activeBtn = document.querySelector(`[onclick="switchAdminTab('${tabId}')"]`);
+        activeBtn.classList.remove('text-gray-400');
+        activeBtn.classList.add('text-white', 'bg-gray-700', 'font-medium');
+    }
+</script>
+@endpush

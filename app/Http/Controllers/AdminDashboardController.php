@@ -44,6 +44,16 @@ class AdminDashboardController extends Controller
             ->orderBy('expenses_sum_amount', 'desc')
             ->get();
 
+        // Ajout des statistiques d'épargne
+        $savingsStats = Goal::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(current_amount) as total_savings'),
+            DB::raw('AVG(current_amount/target_amount * 100) as avg_progress')
+        )
+        ->whereYear('created_at', $now->year)
+        ->groupBy('month')
+        ->get();
+
         $stats = [
             'users' => [
                 'total' => $totalUsers,
@@ -62,7 +72,11 @@ class AdminDashboardController extends Controller
                 'stats' => $categoryStats,
                 'mostUsed' => $categoryStats->first()
             ],
-            'monthlyGrowth' => $monthlyStats->pluck('count', 'month')->toArray()
+            'monthlyGrowth' => $monthlyStats->pluck('count', 'month')->toArray(),
+            'savings' => [
+                'monthly' => $savingsStats->pluck('total_savings', 'month')->toArray(),
+                'progress' => $savingsStats->pluck('avg_progress', 'month')->toArray()
+            ]
         ];
 
         return view('dashboard.admin', compact('stats'));
