@@ -24,12 +24,12 @@
                     
                     <div class="flex items-end justify-between relative">
                         <div>
-                            <div class="text-3xl font-bold text-white">1,248</div>
+                            <div class="text-3xl font-bold text-white">{{ number_format($stats['users']['total']) }}</div>
                             <div class="text-sm text-green-400 flex items-center mt-1">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
                                 </svg>
-                                <span>+12.5% ce mois</span>
+                                <span>{{ number_format($stats['users']['growthRate'], 1) }}% ce mois</span>
                             </div>
                         </div>
                         
@@ -47,12 +47,12 @@
 
                 <!-- Carte Revenu moyen -->
                 <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700/50 shadow-lg relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-600/10 rounded-full blur-2xl transform translate-x-1/2 -translate-y-1/2 group-hover:bg-purple-600/20 transition-all duration-500"></div>
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-green-600/10 rounded-full blur-2xl transform translate-x-1/2 -translate-y-1/2 group-hover:bg-green-600/20 transition-all duration-500"></div>
                     
                     <div class="flex items-center justify-between mb-4 relative">
                         <h3 class="text-lg font-medium text-gray-300">Revenu moyen</h3>
-                        <div class="w-10 h-10 bg-purple-900/50 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 bg-green-900/50 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
@@ -60,13 +60,8 @@
                     
                     <div class="flex items-end justify-between relative">
                         <div>
-                            <div class="text-3xl font-bold text-white">4,850 DH</div>
-                            <div class="text-sm text-green-400 flex items-center mt-1">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-                                </svg>
-                                <span>+3.2% ce mois</span>
-                            </div>
+                            <div class="text-3xl font-bold text-white">{{ number_format($stats['financial']['averageSalary']) }} DH</div>
+                            <div class="text-sm text-gray-400 mt-1">Par utilisateur / mois</div>
                         </div>
                         
                         <div class="relative h-16 w-24">
@@ -99,20 +94,17 @@
                     
                     <div class="flex items-end justify-between relative">
                         <div>
-                            <div class="text-3xl font-bold text-white">1.2M DH</div>
-                            <div class="text-sm text-green-400 flex items-center mt-1">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-                                </svg>
-                                <span>+18.3% ce mois</span>
+                            <div class="text-3xl font-bold text-white">{{ number_format($stats['financial']['totalTransactions']) }} DH</div>
+                            <div class="text-sm text-gray-400 mt-1">
+                                Ce mois : {{ number_format($stats['financial']['monthlyTransactions']) }} DH
                             </div>
-                        </div>
-                        
-                        <div class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center relative">
-                            <svg class="w-16 h-16" viewBox="0 0 36 36">
-                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#4ade80" stroke-width="3" stroke-dasharray="75, 100" stroke-linecap="round"></path>
-                                <text x="18" y="20.5" text-anchor="middle" fill="white" font-size="8">75%</text>
-                            </svg>
+                            <div class="text-sm text-{{ $stats['financial']['transactionGrowth'] >= 0 ? 'green' : 'red' }}-400 flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M{{ $stats['financial']['transactionGrowth'] >= 0 ? '5 10l7-7m0 0l7 7m-7-7v18' : '19 14l-7 7m0 0l-7-7m7 7V3' }}"/>
+                                </svg>
+                                <span>{{ number_format(abs($stats['financial']['transactionGrowth']), 1) }}% ce mois</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -132,20 +124,24 @@
                     
                     <div class="flex items-end justify-between relative">
                         <div>
-                            <div class="text-3xl font-bold text-white">12</div>
-                            <div class="text-sm text-blue-400 flex items-center mt-1">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                <span>Ajouter nouvelle</span>
+                            <div class="text-3xl font-bold text-white">{{ $stats['categories']['total'] }}</div>
+                            <div class="text-sm text-gray-400 mt-1">Plus utilisée : {{ $stats['categories']['mostUsed']->name }}</div>
+                            <div class="text-sm text-purple-400 mt-1">
+                                {{ number_format($stats['categories']['mostUsed']->expenses_count) }} transactions
                             </div>
                         </div>
                         
                         <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-xs font-bold text-white">D</div>
-                            <div class="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-xs font-bold text-white">N</div>
-                            <div class="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center text-xs font-bold text-white">T</div>
-                            <div class="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center text-xs font-bold text-white">+9</div>
+                            @foreach($stats['categories']['stats']->take(3) as $category)
+                                <div class="w-8 h-8 rounded-lg bg-{{ $category->color ?? 'gray' }}-500 flex items-center justify-center text-xs font-bold text-white">
+                                    {{ substr($category->name, 0, 1) }}
+                                </div>
+                            @endforeach
+                            @if($stats['categories']['total'] > 3)
+                                <div class="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center text-xs font-bold text-white">
+                                    +{{ $stats['categories']['total'] - 3 }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

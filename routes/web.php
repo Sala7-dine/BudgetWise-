@@ -9,7 +9,20 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\RecurringExpenseController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Middleware\AdminMiddleware;
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/', function () {
+        return view('home');
+    });
+});
+
 
 // Routes publiques
 Route::get('/', function () {
@@ -52,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Routes administration
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::get('/admin', function () {return view('dashboard/admin'); })->name("admin");
+    Route::get('/admin', [AdminDashboardController::class, 'index'])->name("admin");
     Route::get('users', [UserController::class, 'index'])->name('admin.users.show');
     Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
@@ -62,15 +75,3 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
          ->except(['show', 'edit', 'create']);
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/', function () {
-        if (auth()->user()->isAdmin()) {
-            return redirect('/admin');
-        }
-        return redirect('/user');
-    });
-});
