@@ -12,7 +12,12 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Middleware\AdminMiddleware;
 
 // Routes publiques
-Route::get('/', function () { return view('home'); });
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->to(auth()->user()->isAdmin() ? '/admin' : '/user');
+    }
+    return view('home');
+});
 
 Route::middleware(['auth'])->group(function () {
     // Dashboard
@@ -62,7 +67,10 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', function () {
+        if (auth()->user()->isAdmin()) {
+            return redirect('/admin');
+        }
+        return redirect('/user');
+    });
 });
